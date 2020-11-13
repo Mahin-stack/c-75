@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity,KeyboardAvoidingView, Alert} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import {Header} from 'react-native-elements';
 import * as firebase from 'firebase'
@@ -20,6 +20,7 @@ export default class WriteStoryScreen extends React.Component{
    author: this.state.author,
    storyText: this.state.storyText
     })
+    Alert.alert('Submitted')
     this.setState({
       title: ' ',
       author: ' ',
@@ -28,6 +29,7 @@ export default class WriteStoryScreen extends React.Component{
   }
   render(){
   return (
+    <KeyboardAvoidingView stylestyle={styles.container} behavior= 'padding' enabled>
     <View style={styles.container}>
 <Header
 backgroundColor = {'pink'}
@@ -97,8 +99,8 @@ onPress={this.submitButton}
 
 </View>
 
-
 </View>
+</KeyboardAvoidingView>
   );
 }
 }
