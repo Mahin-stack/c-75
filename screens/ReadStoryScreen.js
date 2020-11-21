@@ -1,48 +1,58 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import db from '../config.js'
+import { StyleSheet, Text, View ,FlatList} from 'react-native';
+import db from '../config'
+import { SearchBar } from 'react-native-elements'
 
-export default class ReadStoryScreen extends React.Component{
+export default class ReadStoryScreen extends React.Component {
   constructor(){
-    super()
-    this.state={
-      allStories=[],
+    super();
+    this.state ={
+      allStories:[]
     }
   }
-   componentDidMount(){
-     this.retriveStories()
-   }
-   retriveStories=()=>{
-     try {
-      var allStories=[],
-      var story=db.collection('newStory').get().then((querySnap)=>{
-        querySnap.forEach((doc)=>{
-          allStories.push(doc.data())
-          console.log('this are the stories',allStories)
+  componentDidMount(){
+    this.retrieveStories()
+  }
+
+  retrieveStories=()=>{
+    try {
+      var allStories= []
+      var stories = db.collection("newStory")
+        .get().then((querySnapshot)=> {
+          querySnapshot.forEach((doc)=> {
+              // doc.data() is never undefined for query doc snapshots
+              
+              allStories.push(doc.data())
+              console.log('this are the stories',allStories)
+          })
+          this.setState({allStories})
         })
-        this.setState({allStories})
-      }) 
-     }
-     catch (err){
-console.log(err)
-     }
-   }
-  render(){
-  return (
-    <View>
-    <FlatList
-       data={this.state.allStories}
-       renderItem={({ item }) => (
-         <View style={styles.itemContainer}>
-           <Text>Title: {item.title}</Text>
-       <Text>Author : {item.author}</Text>
-         </View>
-       )}
-       keyExtractor={(item, index) => index.toString()}
-       />
-</View>
-  );
-}
+    }
+    catch (error) {
+      console.log(error);
+    }
+  };
+
+    render(){
+        return(
+         <View>
+<SearchBar
+ placeholder="Type Here..."
+ onChangeText={this.retrieveStories}
+/>
+                 <FlatList
+                    data={this.state.allStories}
+                    renderItem={({ item }) => (
+                      <View style={styles.itemContainer}>
+                        <Text>Title: {item.title}</Text>
+                    <Text>Author : {item.author}</Text>
+                      </View>
+                    )}
+                    keyExtractor={(item, index) => index.toString()}
+                    />
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
